@@ -3,39 +3,60 @@ import "./style.css"
 import * as THREE from 'three';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+
+const Rooms = {
+  exterieur1: "Outdoor0001.webp",
+  exterieur2: "Outdoor0002.webp",
+  exterieur3: "Outdoor0003.webp",
+  cuisine: "Cuisine0025.webp",
+  salon: "Salon0025.webp",
+  bureau: "Bureau0001.webp",
+  couloir1: "Couloir0026.webp",
+  couloir2: "Couloir0025.webp",
+  chambre1: "Chambre_10001.webp",
+  chambre2: "Chambre_20001.webp",
+  chambre3: "Chambre_30001.webp",
+  sdb: "SDB0001.webp",
+  cellier: "Cellier0001.webp",
+  wc: "WC0001.webp"
+}
 
 let controls, camera, scene, renderer;
+let textureEquirec, textureLoader;
 
 init();
 
 function init() {
 
+  textureLoader = new THREE.TextureLoader();
+
+  const param = {
+    room: Rooms.cuisine,
+    fullscreen: false
+  };
+
   // CAMERAS
 
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1100);
+  camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100);
   camera.position.set(0, 0, 2.5);
 
   // SCENE
 
   scene = new THREE.Scene();
 
-  const geometry = new THREE.SphereGeometry(500, 60, 40);
-  // invert the geometry on the x-axis so that all of the faces point inward
-  geometry.scale(- 1, 1, 1);
+  // Textures
+  setBackground(param.room);
 
-  const texture = new THREE.TextureLoader().load('/Cuisine_001.webp');
-  texture.colorSpace = THREE.SRGBColorSpace;
-  const material = new THREE.MeshBasicMaterial({ map: texture });
-
-  const mesh = new THREE.Mesh(geometry, material);
-
-  scene.add(mesh);
+  //
 
   renderer = new THREE.WebGLRenderer();
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setAnimationLoop(animate);
   document.body.appendChild(renderer.domElement);
+
+
   //
 
   controls = new OrbitControls(camera, renderer.domElement);
@@ -44,6 +65,32 @@ function init() {
 
   window.addEventListener('resize', onWindowResize);
 
+  //
+
+  const gui = new GUI();
+  gui.add(param, "fullscreen").onChange(setFullScreen);
+  gui.add(param, "room", Rooms).onChange(setBackground);
+}
+
+function setBackground(room)
+{
+  textureEquirec = textureLoader.load(room);
+  textureEquirec.mapping = THREE.EquirectangularReflectionMapping;
+  textureEquirec.colorSpace = THREE.SRGBColorSpace;
+
+  scene.background = textureEquirec;
+}
+
+function setFullScreen(value)
+{
+  if (value)
+  {
+    document.body.requestFullscreen();
+  }
+  else
+  {
+    document.exitFullscreen();
+  }
 }
 
 function onWindowResize() {

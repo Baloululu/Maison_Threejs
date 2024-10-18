@@ -32,14 +32,14 @@ function init() {
   // invert the geometry on the x-axis so that all of the faces point inward
   geometry.scale(- 1, 1, 1);
 
-  const textureL = new THREE.TextureLoader().load('/Salon0025_L.webp');
+  const textureL = new THREE.TextureLoader().load('/Outdoor0001.webp');
   textureL.colorSpace = THREE.SRGBColorSpace;
   const materialL = new THREE.MeshBasicMaterial({ map: textureL });
 
   const meshL = new THREE.Mesh(geometry, materialL);
   meshL.layers.set(1);
 
-  const textureR = new THREE.TextureLoader().load('/Salon0025_R.webp');
+  const textureR = new THREE.TextureLoader().load('/SDB0001.webp');
   textureR.colorSpace = THREE.SRGBColorSpace;
   const materialR = new THREE.MeshBasicMaterial({ map: textureR });
 
@@ -49,7 +49,7 @@ function init() {
   scene.add(meshL);
   scene.add(meshR);
 
-  const textureEquirec = new THREE.TextureLoader().load('/Salon0025_L.webp');
+  const textureEquirec = new THREE.TextureLoader().load('/Salon0025.webp');
   textureEquirec.mapping = THREE.EquirectangularReflectionMapping;
   textureEquirec.colorSpace = THREE.SRGBColorSpace;
 
