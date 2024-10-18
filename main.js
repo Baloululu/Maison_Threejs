@@ -6,35 +6,36 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 
 const Rooms = {
-  exterieur1: "Outdoor0001.webp",
-  exterieur2: "Outdoor0002.webp",
-  exterieur3: "Outdoor0003.webp",
-  cuisine: "Cuisine0025.webp",
-  salon: "Salon0025.webp",
-  bureau: "Bureau0001.webp",
-  couloir1: "Couloir0026.webp",
-  couloir2: "Couloir0025.webp",
-  chambre1: "Chambre_10001.webp",
-  chambre2: "Chambre_20001.webp",
-  chambre3: "Chambre_30001.webp",
-  sdb: "SDB0001.webp",
-  cellier: "Cellier0001.webp",
-  wc: "WC0001.webp"
+  exterieur1: "Outdoor0001",
+  exterieur2: "Outdoor0002",
+  exterieur3: "Outdoor0003",
+  cuisine: "Cuisine0025",
+  salon: "Salon0025",
+  bureau: "Bureau0001",
+  couloir1: "Couloir0026",
+  couloir2: "Couloir0025",
+  chambre1: "Chambre_10001",
+  chambre2: "Chambre_20001",
+  chambre3: "Chambre_30001",
+  sdb: "SDB0001",
+  cellier: "Cellier0001",
+  wc: "WC0001"
 }
 
 let controls, camera, scene, renderer;
 let textureEquirec, textureLoader;
+
+let param = {
+  room: Rooms.cuisine,
+  fullscreen: false,
+  HD: false
+};
 
 init();
 
 function init() {
 
   textureLoader = new THREE.TextureLoader();
-
-  const param = {
-    room: Rooms.cuisine,
-    fullscreen: false
-  };
 
   // CAMERAS
 
@@ -69,12 +70,13 @@ function init() {
 
   const gui = new GUI();
   gui.add(param, "fullscreen").onChange(setFullScreen);
+  gui.add(param, "HD").onChange(setBackground);
   gui.add(param, "room", Rooms).onChange(setBackground);
 }
 
-function setBackground(room)
+function setBackground(_room)
 {
-  textureEquirec = textureLoader.load(room);
+  textureEquirec = textureLoader.load(param.room + (param.HD ? "" : "_mobile") + ".webp");
   textureEquirec.mapping = THREE.EquirectangularReflectionMapping;
   textureEquirec.colorSpace = THREE.SRGBColorSpace;
 
